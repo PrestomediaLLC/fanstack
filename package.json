@@ -1,0 +1,33 @@
+{
+	"name": "@prestomedia/fanstack",
+	"version": "1.0.0",
+	"description": "High-performance, typesafe Firebase Functions and Angular stack powered by a curated Express architecture.",
+	"license": "MIT",
+	"author": "Prestomedia, LLC",
+	"homepage": "https://prestomedia.com/open-source/fanstack/",
+	"repository": "https://github.com/PrestomediaLLC/fanstack",
+	"type": "module",
+	"bin": {
+		"fan": "./bin/fan-stack.js"
+	},
+	"files": [
+		"dist",
+		"templates",
+		"bin"
+	],
+	"engines": {
+		"node": ">=18.0.0"
+	},
+	"scripts": {
+		"build": "tsc && node scripts/chmod.js"
+	},
+	"dependencies": {
+		"chokidar": "^4.0.1",
+		"inquirer": "^9.2.12"
+	},
+	"devDependencies": {
+		"@types/inquirer": "^9.0.10",
+		"@types/node": "^25.9.3",
+		"typescript": "^5.0.0"
+	}
+}
