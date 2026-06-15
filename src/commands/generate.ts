@@ -214,7 +214,7 @@ function buildClientTreeStructure(actions: ActionMetadata[]): string {
 		current.actions.push(action);
 	}
 
-	function renderNode(node: any, indent: string): string {
+	function renderNode(node: any, indent: string, isRoot: boolean): string {
 		let output = '';
 
 		// Render direct actions belonging to this deep leaf namespace
@@ -229,13 +229,19 @@ function buildClientTreeStructure(actions: ActionMetadata[]): string {
 
 		// Render namespaces
 		for (const childName of Object.keys(node.children)) {
-			output += `${indent}public ${childName} = {\n`;
-			output += renderNode(node.children[childName], indent + '  ');
-			output += `${indent}};\n`;
+			if (isRoot) {
+				output += `${indent}public ${childName} = {\n`;
+				output += renderNode(node.children[childName], indent + '\t', false);
+				output += `${indent}};\n`;
+			} else {
+				output += `${indent}${childName}: {\n`;
+				output += renderNode(node.children[childName], indent + '\t', false);
+				output += `${indent}},\n`;
+			}
 		}
 
 		return output;
 	}
 
-	return renderNode(root, '  ');
+	return renderNode(root, '\t', true);
 }
