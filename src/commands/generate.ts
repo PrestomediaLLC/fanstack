@@ -41,9 +41,13 @@ export async function generateCommand(options: { watch: boolean }) {
 
 	if (options.watch) {
 		console.log(`👀 Watching active codebase under ${actionsFolder} for changes...`);
-		const watcher = chokidar.watch('**/*.action.ts', { cwd: actionsFolder, ignoreInitial: true });
-		watcher.on('all', () => {
-			executeGeneration();
+
+		const watcher = chokidar.watch('.', { cwd: actionsFolder, ignoreInitial: true });
+
+		watcher.on('all', (event, filePath) => {
+			if (filePath.endsWith('.action.ts')) {
+				executeGeneration();
+			}
 		});
 	}
 }
@@ -130,15 +134,15 @@ function generateBackendRouter(cwd: string, actions: ActionMetadata[]) {
 	);
 
 	actions.forEach((act, idx) => {
-		lines.push(`  ${idx === 0 ? '' : 'else '}if (actionName === '${act.actionNamespace}') {`);
-		lines.push(`    return await a${idx}(payload, context);`);
-		lines.push(`  }`);
+		lines.push(`\t${idx === 0 ? '' : 'else '}if (actionName === '${act.actionNamespace}') {`);
+		lines.push(`\t\treturn await a${idx}(payload, context);`);
+		lines.push(`\t}`);
 	});
 
 	lines.push(
-		`  else {`,
-		`    throw new HttpsError('not-found', \`Action "\${actionName}" not found.\`);`,
-		`  }`,
+		`\telse {`,
+		`\t\tthrow new HttpsError('not-found', \`Action "\${actionName}" not found.\`);`,
+		`\t}`,
 		`};`,
 	);
 
