@@ -4,8 +4,14 @@
 	"description": "Connect Firebase Functions to Angular with end-to-end type safety and context-building middleware.",
 	"license": "MIT",
 	"author": "Prestomedia, LLC",
-	"homepage": "https://prestomedia.com/open-source/fanstack/",
-	"repository": "https://github.com/PrestomediaLLC/fanstack",
+	"homepage": "https://fanstack.com",
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/PrestomediaLLC/fanstack.git"
+	},
+	"bugs": {
+		"url": "https://github.com/PrestomediaLLC/fanstack/issues"
+	},
 	"type": "module",
 	"bin": {
 		"fan": "./bin/fan-stack.js"
@@ -18,6 +24,10 @@
 	"engines": {
 		"node": ">=18.0.0"
 	},
+	"sideEffects": false,
+	"publishConfig": {
+		"access": "public"
+	},
 	"scripts": {
 		"build": "tsc && node scripts/chmod.js"
 	},
@@ -29,5 +39,21 @@
 		"@types/inquirer": "^9.0.10",
 		"@types/node": "^25.9.3",
 		"typescript": "^5.0.0"
-	}
+	},
+	"keywords": [
+		"angular",
+		"firebase",
+		"firebase-functions",
+		"typescript",
+		"angularfire",
+		"angular service",
+		"type-safety",
+		"code-generation",
+		"code-generator",
+		"cli",
+		"rpc",
+		"middleware",
+		"serverless",
+		"https-callable"
+	]
 }

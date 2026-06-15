@@ -3,6 +3,7 @@
 [![npm version](https://img.shields.io/npm/v/@prestomedia/fanstack.svg?style=flat-square)](https://www.npmjs.com/package/@prestomedia/fanstack)
 [![npm downloads](https://img.shields.io/npm/dm/@prestomedia/fanstack.svg?style=flat-square)](https://www.npmjs.com/package/@prestomedia/fanstack)
 [![License: MIT](https://img.shields.io/badge/License-MIT-orange.svg?style=flat-square)](https://opensource.org/licenses/MIT)
+[![Prestomedia, LLC](https://img.shields.io/badge/Prestomedia%2C%20LLC-47515E?style=flat-square)](https://prestomedia.com)
 
 Connect Firebase Functions to Angular with end-to-end type safety and context-building middleware.
 
