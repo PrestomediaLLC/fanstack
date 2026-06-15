@@ -8,12 +8,8 @@ import { Functions, httpsCallable } from '@angular/fire/functions';
 export class FuncServiceBase {
 	protected functions = inject(Functions);
 
-	/**
-	 * Universal internal caller wrapper
-	 */
 	protected _call<IN, OUT>(actionName: string): (payload: IN) => Promise<OUT> {
 		return async (payload: IN): Promise<OUT> => {
-			// Fanstack exposes one main Express endpoint through an onCall handler
 			const callable = httpsCallable<{ action: string; payload: IN }, OUT>(
 				this.functions,
 				'action',

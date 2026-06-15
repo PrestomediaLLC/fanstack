@@ -1,7 +1,7 @@
 {
 	"name": "@prestomedia/fanstack",
 	"version": "1.0.0",
-	"description": "High-performance, typesafe Firebase Functions and Angular stack powered by a curated Express architecture.",
+	"description": "Connect Firebase Functions to Angular with end-to-end type safety and context-building middleware.",
 	"license": "MIT",
 	"author": "Prestomedia, LLC",
 	"homepage": "https://prestomedia.com/open-source/fanstack/",

@@ -1,6 +1,6 @@
 # @prestomedia/fanstack
 
-End-to-end typesafe Firebase Functions and Angular stack.
+Connect Firebase Functions to Angular with end-to-end type safety and context-building middleware.
 
 - (F)irebase Functions
 - (A)ngular
