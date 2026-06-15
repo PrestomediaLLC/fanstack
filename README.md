@@ -42,6 +42,9 @@ npx fan init
 
 _This creates a `fan` folder in your backend with pre-configured middleware, an action context, and an example action_
 
+> [!IMPORTANT]
+> Move the contents of fan-index-example.ts into your index.ts file so the `action` endpoint is ready to be called from the generated Angular service.
+
 ### 3. Generate the Client
 
 Create an angular service that calls your action functions.
