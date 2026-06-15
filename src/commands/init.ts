@@ -77,7 +77,7 @@ export async function initCommand() {
 			type: 'input',
 			name: 'angularPath',
 			message:
-				'Enter the relative path to your Angular project directory where generation artifacts should go:',
+				'Enter the relative path to your Angular project directory where generation artifacts should go. You can change this later in the fan.config.json file:',
 			default: defaultAngularPath,
 			validate: (input: string) => (input.trim().length > 0 ? true : 'Path cannot be empty.'),
 		},
