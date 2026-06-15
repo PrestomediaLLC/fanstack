@@ -28,8 +28,17 @@ export async function initCommand() {
 	}
 
 	// 2. Check for pre-existing configurations
+	const tsConfigPath = path.join(cwd, 'tsconfig.json');
+	if (!fs.existsSync(tsConfigPath)) {
+		console.error(
+			'❌ Error: FAN Stack requires a TypeScript-configured Firebase Functions environment. No tsconfig.json found. Please run `firebase init functions` and select TypeScript.',
+		);
+		process.exit(1);
+	}
+
+	// 3. Check for pre-existing configurations
 	const configPath = path.join(cwd, 'fan.config.json');
-	const fanFolder = path.join(cwd, 'fan');
+	const fanFolder = path.join(cwd, 'src/fan'); // <-- Updated to check inside src/
 
 	if (fs.existsSync(configPath) || fs.existsSync(fanFolder)) {
 		console.error(
@@ -89,12 +98,12 @@ export async function initCommand() {
 	const templateSourceDir = path.resolve(path.dirname(__filename), '../../templates');
 
 	const directoriesToScaffold = [
-		'fan',
-		'fan/middleware',
-		'fan/interfaces',
-		'fan/actions',
-		'fan/actions/example',
-		'fan/templates',
+		'src/fan',
+		'src/fan/middleware',
+		'src/fan/interfaces',
+		'src/fan/actions',
+		'src/fan/actions/example',
+		'src/fan/templates',
 	];
 
 	for (const dir of directoriesToScaffold) {
@@ -104,43 +113,43 @@ export async function initCommand() {
 	// Copy operations from internal template records
 	writeTemplate(
 		path.join(templateSourceDir, 'action-context.ts'),
-		path.join(cwd, 'fan/action-context.ts'),
+		path.join(cwd, 'src/fan/action-context.ts'),
 	);
-	writeTemplate(path.join(templateSourceDir, 'fanstack.ts'), path.join(cwd, 'fan/fanstack.ts'));
+	writeTemplate(path.join(templateSourceDir, 'fanstack.ts'), path.join(cwd, 'src/fan/fanstack.ts'));
 	writeTemplate(
 		path.join(templateSourceDir, 'middleware/index.ts'),
-		path.join(cwd, 'fan/middleware/index.ts'),
+		path.join(cwd, 'src/fan/middleware/index.ts'),
 	);
 	writeTemplate(
 		path.join(templateSourceDir, 'middleware/require-auth.ts'),
-		path.join(cwd, 'fan/middleware/require-auth.ts'),
+		path.join(cwd, 'src/fan/middleware/require-auth.ts'),
 	);
 	writeTemplate(
 		path.join(templateSourceDir, 'middleware/connect-to-database.ts'),
-		path.join(cwd, 'fan/middleware/connect-to-database.ts'),
+		path.join(cwd, 'src/fan/middleware/connect-to-database.ts'),
 	);
 	writeTemplate(
 		path.join(templateSourceDir, 'middleware/read-environment.ts'),
-		path.join(cwd, 'fan/middleware/read-environment.ts'),
+		path.join(cwd, 'src/fan/middleware/read-environment.ts'),
 	);
 	writeTemplate(
 		path.join(templateSourceDir, 'middleware/read-user-profile.ts'),
-		path.join(cwd, 'fan/middleware/read-user-profile.ts'),
+		path.join(cwd, 'src/fan/middleware/read-user-profile.ts'),
 	);
 
 	// Create sample implementation interfaces and actions
 	fs.writeFileSync(
-		path.join(cwd, 'fan/interfaces/say-hello.ts'),
+		path.join(cwd, 'src/fan/interfaces/say-hello.ts'),
 		`export interface SayHelloPayload {\n  name: string;\n}\n\nexport interface SayHelloResponse {\n  greeting: string;\n}`,
 		'utf8',
 	);
 	fs.writeFileSync(
-		path.join(cwd, 'fan/fan-actions.gen.ts'),
+		path.join(cwd, 'src/fan/fan-actions.gen.ts'),
 		`import { ActionContext } from './action-context';\n\nexport const runAction = async (actionName: string, payload: any, context: ActionContext): Promise<any> => {\n  throw new Error('Router not generated. Run \`fan generate\` first.');\n};`,
 		'utf8',
 	);
 	fs.writeFileSync(
-		path.join(cwd, 'fan/actions/example/say-hello.action.ts'),
+		path.join(cwd, 'src/fan/actions/example/say-hello.action.ts'),
 		`import { ActionContext } from '../../action-context';\nimport { SayHelloPayload, SayHelloResponse } from '../../interfaces/say-hello';\n\nexport const action = async (payload: SayHelloPayload, ctx: ActionContext): Promise<SayHelloResponse> => {\n  return {\n    greeting: \`Hello, \${payload.name}! Generated via Fanstack.\`\n  };\n};`,
 		'utf8',
 	);
@@ -148,14 +157,39 @@ export async function initCommand() {
 	// Write out the base helper template to be compiled into the frontend bundle
 	writeTemplate(
 		path.join(templateSourceDir, 'func-service-base.ts'),
-		path.join(cwd, 'fan/templates/func-service-base.ts'),
+		path.join(cwd, 'src/fan/templates/func-service-base.ts'),
 	);
 
 	// Write integration example to functions root next to their main index file
 	writeTemplate(
 		path.join(templateSourceDir, 'index-example.ts'),
-		path.join(cwd, 'fan-index-example.ts'),
+		path.join(cwd, 'src/fan-index-example.ts'),
 	);
+
+	// 7. Update tsconfig.json to exclude frontend templates
+	try {
+		const tsConfigRaw = fs.readFileSync(tsConfigPath, 'utf8');
+		const tsConfig = JSON.parse(tsConfigRaw);
+
+		// Ensure the exclude array exists
+		if (!tsConfig.exclude) {
+			tsConfig.exclude = [];
+		}
+
+		// Inject the exclusion if it isn't already there
+		const templatePath = 'src/fan/templates/**';
+		if (!tsConfig.exclude.includes(templatePath)) {
+			tsConfig.exclude.push(templatePath);
+			fs.writeFileSync(tsConfigPath, JSON.stringify(tsConfig, null, 2), 'utf8');
+			console.log('✅ Updated tsconfig.json to exclude Angular templates.');
+		}
+	} catch (err) {
+		// Fallback for when tsconfig.json contains comments or is malformed
+		console.warn('\n⚠️  Notice: Could not automatically update tsconfig.json.');
+		console.warn(
+			'Please manually add "src/fan/templates/**" to the "exclude" array in your functions/tsconfig.json to prevent backend build errors.\n',
+		);
+	}
 
 	console.log('🎉 Fanstack structure successfully initialized!');
 }

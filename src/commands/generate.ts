@@ -22,7 +22,7 @@ export async function generateCommand(options: { watch: boolean }) {
 	}
 
 	const config = JSON.parse(fs.readFileSync(configPath, 'utf8'));
-	const actionsFolder = path.join(cwd, 'fan/actions');
+	const actionsFolder = path.join(cwd, 'src/fan/actions');
 
 	const executeGeneration = () => {
 		try {
@@ -142,7 +142,7 @@ function generateBackendRouter(cwd: string, actions: ActionMetadata[]) {
 		`};`,
 	);
 
-	fs.writeFileSync(path.join(cwd, 'fan/fan-actions.gen.ts'), lines.join('\n'), 'utf8');
+	fs.writeFileSync(path.join(cwd, 'src/fan/fan-actions.gen.ts'), lines.join('\n'), 'utf8');
 }
 
 /**
@@ -156,7 +156,7 @@ function generateFrontendBundle(
 	const angularTargetFile = path.resolve(cwd, relativeAngularPath, 'fan-func-service.gen.ts');
 
 	// 1. Gather interface extractions
-	const interfacesDir = path.join(cwd, 'fan/interfaces');
+	const interfacesDir = path.join(cwd, 'src/fan/interfaces');
 	let concatenatedInterfaces = '';
 	if (fs.existsSync(interfacesDir)) {
 		const files = fs.readdirSync(interfacesDir);
@@ -171,7 +171,7 @@ function generateFrontendBundle(
 	}
 
 	// 2. Load custom base content directly
-	const baseClassPath = path.join(cwd, 'fan/templates/func-service-base.ts');
+	const baseClassPath = path.join(cwd, 'src/fan/templates/func-service-base.ts');
 	const baseClassContent = fs.existsSync(baseClassPath)
 		? fs.readFileSync(baseClassPath, 'utf8').replace(/import\s+[^;]+;/gim, '')
 		: '';
