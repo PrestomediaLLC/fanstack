@@ -33,7 +33,7 @@ If you change a backend payload requirement, your Angular build will fail immedi
 
 ### 1. Installation
 
-Run this inside your Firebase functions/ directory:
+Run this inside your Firebase functions directory:
 
 ```bash
 npm install -D @prestomedia/fanstack
@@ -89,9 +89,15 @@ export const action = async (
 > [!TIP]
 > The first parameter (payload) is required. Use `payload: void` when an action does not have a payload in.
 
+> [!TIP]
+> The payload parameter and return interfaces _must_ be placed in the `/fan/interfaces` folder and not reference anything outside that folder. The genertor scoops up all those interfaces and includes them with the generated Angular service.
+
+> [!TIP]
+> You can use primitive types or inline JavaScript objects, too.
+
 ### The Generated Angular Service
 
-Run `fan generate`, and Fanstack builds `FuncService` right into your Angular app. Your frontend code is incredibly clean and completely typesafe.
+Run `fan generate` and Fanstack will build `FuncService` right into your Angular app. Your frontend code is incredibly clean and completely typesafe. Your actions folder structure is transformed into namespaces within the service.
 
 File: `src/app/my.component.ts`
 
@@ -122,7 +128,7 @@ export class MyComponent {
 
 ## 🧠 The Middleware Pipeline
 
-Fanstack uses a blazing-fast array-based middleware pipeline. You don't need heavy HTTP frameworks. Just write simple async functions that mutate your ActionContext or throw standard Firebase `HttpsError` exceptions.
+Fanstack uses a blazing-fast, array-based middleware pipeline. You don't need heavy HTTP frameworks. Just write simple async functions that mutate your ActionContext or throw standard Firebase `HttpsError` exceptions.
 
 File: `fan/middleware/require-admin.ts`
 
@@ -143,6 +149,9 @@ export const requireAdmin = async (req: CallableRequest, ctx: ActionContext): Pr
 ```
 
 Drop it into your middleware array in `fanstack.ts` and it runs automatically before your actions!
+
+> [!NOTE]
+> The middleware can add anything to the ActionContext. The ActionContext is then passed to the action function.
 
 ### 🗄️ Connect to MySql (Google Cloud Sql)
 
