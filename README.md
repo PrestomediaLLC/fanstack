@@ -90,7 +90,7 @@ export const action = async (
 > The first parameter (payload) is required. Use `payload: void` when an action does not have a payload in.
 
 > [!TIP]
-> The payload parameter and return interfaces _must_ be placed in the `/fan/interfaces` folder and not reference anything outside that folder. The genertor scoops up all those interfaces and includes them with the generated Angular service.
+> The payload parameter and return interfaces _must_ be placed in the `/fan/interfaces` folder and not reference anything outside that folder. The generator scoops up all those interfaces and includes them with the generated Angular service.
 
 > [!TIP]
 > You can use primitive types or inline JavaScript objects, too.
