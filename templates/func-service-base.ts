@@ -9,11 +9,11 @@ export class FuncServiceBase {
 	protected functions = inject(Functions);
 
 	protected _call<IN, OUT>(actionName: string): (payload: IN) => Promise<OUT> {
+		// Initialize the callable synchronously in the injection context
+		const callable = httpsCallable<{ action: string; payload: IN }, OUT>(this.functions, 'action');
+
+		// Return the async execution wrapper to be called later
 		return async (payload: IN): Promise<OUT> => {
-			const callable = httpsCallable<{ action: string; payload: IN }, OUT>(
-				this.functions,
-				'action',
-			);
 			const result = await callable({ action: actionName, payload });
 			return result.data;
 		};

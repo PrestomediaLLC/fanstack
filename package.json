@@ -1,6 +1,6 @@
 {
 	"name": "@prestomedia/fanstack",
-	"version": "1.0.0",
+	"version": "1.0.1",
 	"description": "Connect Firebase Functions to Angular with end-to-end type safety and context-building middleware.",
 	"license": "MIT",
 	"author": "Prestomedia, LLC",
