@@ -1,6 +1,6 @@
 {
 	"name": "@prestomedia/fanstack",
-	"version": "1.0.1",
+	"version": "1.0.2",
 	"description": "Connect Firebase Functions to Angular with end-to-end type safety and context-building middleware.",
 	"license": "MIT",
 	"author": "Prestomedia, LLC",
@@ -29,7 +29,7 @@
 		"access": "public"
 	},
 	"scripts": {
-		"build": "tsc && node scripts/chmod.js"
+		"build": "node -e \"fs.rmSync('dist', {recursive:true, force:true})\" && tsc && node scripts/chmod.js"
 	},
 	"dependencies": {
 		"chokidar": "^4.0.1",
